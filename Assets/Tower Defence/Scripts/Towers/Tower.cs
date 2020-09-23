@@ -135,7 +135,7 @@ namespace TowerDefence.Towers
 
             // Draw a mostly transparent blue sphere indicating the maximum range
             Gizmos.color = new Color(0, 0, 1, 0.25f);
-            Gizmos.DrawSphere(transform.position, maximumRange);
+            Gizmos.DrawSphere(transform.position, MaximumRange);
         }
 #endif
 
@@ -153,6 +153,11 @@ namespace TowerDefence.Towers
             }
         }
 
+        protected virtual void RenderAttackVisuals()
+        {
+            // This is unused in the base class
+        }
+
         private void LevelUp()
         {
             level++;
@@ -168,7 +173,7 @@ namespace TowerDefence.Towers
             {
                 target.Damage(this);
 
-                // Render attack visuals
+                RenderAttackVisuals();
             }
         }
 

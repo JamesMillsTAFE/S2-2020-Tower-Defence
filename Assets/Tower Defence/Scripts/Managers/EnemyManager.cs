@@ -20,6 +20,18 @@ namespace TowerDefence.Managers
             aliveEnemies.Add(newEnemy.GetComponent<Enemy>());
         }
 
+        public void KillEnemy(Enemy _enemy)
+        {
+            // Attempt to find the enemy in the list
+            int enemyIndex = aliveEnemies.IndexOf(_enemy);
+            if (enemyIndex != -1)
+            {
+                // The enemy exists and we can kill it and remove it from the list
+                Destroy(_enemy.gameObject);
+                aliveEnemies.RemoveAt(enemyIndex);
+            }
+        }
+
         /// <summary>
         /// Loops through all enemies alive in the game, finding the closest enemies within a certain range.
         /// </summary>

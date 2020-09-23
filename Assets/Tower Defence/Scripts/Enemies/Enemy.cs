@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 using TowerDefence.Towers;
+using TowerDefence.Managers;
 
 namespace TowerDefence.Enemies
 {
@@ -47,6 +48,7 @@ namespace TowerDefence.Enemies
         {
             _tower.AddExperience(xp);
             player.AddMoney(money);
+            EnemyManager.instance.KillEnemy(this);
         }
 
         // Start is called before the first frame update
