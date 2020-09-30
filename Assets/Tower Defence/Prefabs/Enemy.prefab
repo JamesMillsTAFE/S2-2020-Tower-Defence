@@ -107,7 +107,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   speed: 1
-  health: 1
+  health: 5
   damage: 1
   size: 1
   xp: 1

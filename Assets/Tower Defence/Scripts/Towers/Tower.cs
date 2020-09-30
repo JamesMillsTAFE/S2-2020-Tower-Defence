@@ -4,9 +4,10 @@ using UnityEngine;
 using TowerDefence.Enemies;
 using TowerDefence.Managers;
 
+
 namespace TowerDefence.Towers
 {
-    public class Tower : MonoBehaviour
+    public abstract class Tower : MonoBehaviour
     {
         #region Properties
         public string TowerName // The public accessor for the towerName variable.
@@ -18,6 +19,7 @@ namespace TowerDefence.Towers
         {
             get => description;
         }
+
 
         public int Cost // The public accessor for the cost variable.
         {
@@ -42,6 +44,7 @@ namespace TowerDefence.Towers
             }
         }
 
+
         /// <summary>
         /// Calculates the required experience based on the current level
         /// and the experience scalar.
@@ -56,11 +59,13 @@ namespace TowerDefence.Towers
                     return baseRequiredXp;
                 }
 
+
                 // Multiply the level by the experienceScalar to get the multiplier
                 // for the baseRequiredXp
                 return baseRequiredXp * (level * experienceScaler);
             }
         }
+
 
         /// <summary>
         /// The maximum range the tower can reach, based on it's level
@@ -74,6 +79,7 @@ namespace TowerDefence.Towers
             }
         }
 
+
         /// <summary>
         /// The amount of damage the tower does, multiplied by it's level.
         /// </summary>
@@ -85,7 +91,20 @@ namespace TowerDefence.Towers
                 return damage * (level * 0.5f + 0.5f);
             }
         }
+
+
+        /// <summary>
+        /// The Enemy the turret is currently targeting, if no enemy is targeted this is null.
+        /// </summary>
+        protected Enemy TargetedEnemy
+        {
+            get
+            {
+                return target;
+            }
+        }
         #endregion
+
 
         [Header("General Stats")]
         [SerializeField]
@@ -103,7 +122,7 @@ namespace TowerDefence.Towers
         [SerializeField]
         private float maximumRange = 5;
         [SerializeField, Min(0.1f)]
-        private float fireRate = 0.1f;
+        protected float fireRate = 0.1f;
 
         [Header("Experience Stats")]
         [SerializeField, Range(2, 5)]
@@ -113,11 +132,14 @@ namespace TowerDefence.Towers
         [SerializeField, Min(1)]
         private float experienceScaler = 1;
 
+
         private int level = 1;
         private float xp = 0;
         private Enemy target = null;
 
+
         private float currentTime = 0;
+
 
 #if UNITY_EDITOR
         // OnValidate runs whenever a variable is changed within the inspector of this class
@@ -126,6 +148,7 @@ namespace TowerDefence.Towers
             maximumRange = Mathf.Clamp(maximumRange, minimumRange + 1, float.MaxValue);
         }
 
+
         // OnDrawGizmosSelected draws helpful visuals only when the object is selected
         private void OnDrawGizmosSelected()
         {
@@ -133,11 +156,13 @@ namespace TowerDefence.Towers
             Gizmos.color = new Color(1, 0, 0, 0.25f);
             Gizmos.DrawSphere(transform.position, minimumRange);
 
+
             // Draw a mostly transparent blue sphere indicating the maximum range
             Gizmos.color = new Color(0, 0, 1, 0.25f);
             Gizmos.DrawSphere(transform.position, MaximumRange);
         }
 #endif
+
 
         public void AddExperience(float _xp)
         {
@@ -153,18 +178,17 @@ namespace TowerDefence.Towers
             }
         }
 
-        protected virtual void RenderAttackVisuals()
-        {
-            // This is unused in the base class
-        }
+        protected abstract void RenderAttackVisuals();
+        protected abstract void RenderLevelUpVisuals();
 
         private void LevelUp()
         {
             level++;
             xp = 0;
 
-            // Display level up visuals here
+            RenderLevelUpVisuals();
         }
+
 
         private void Fire()
         {
@@ -206,6 +230,7 @@ namespace TowerDefence.Towers
             target = GetClosestEnemy(closeEnemies);
         }
 
+
         // _enemies is the array of enemies within range
         private Enemy GetClosestEnemy(Enemy[] _enemies)
         {
@@ -230,7 +255,7 @@ namespace TowerDefence.Towers
         }
 
         // Update is called once per frame
-        void Update()
+        protected virtual void Update()
         {
             Target();
             FireWhenReady();
