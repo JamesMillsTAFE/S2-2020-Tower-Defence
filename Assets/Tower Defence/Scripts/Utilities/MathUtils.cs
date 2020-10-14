@@ -12,5 +12,12 @@ namespace TowerDefence.Utilities
             _distance = heading.magnitude;
             _direction = heading.normalized;
         }
+
+        public static void DistanceAndDirection(out float _distance, out Vector3 _direction, Vector3 _from, Vector3 _to)
+        {
+            Vector3 heading = _to - _from;
+            _distance = heading.magnitude;
+            _direction = heading.normalized;
+        }
     }
 }
