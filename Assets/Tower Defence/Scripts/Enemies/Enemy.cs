@@ -1,6 +1,8 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+
 using TowerDefence.Towers;
 using TowerDefence.Managers;
 
@@ -8,6 +10,12 @@ namespace TowerDefence.Enemies
 {
     public class Enemy : MonoBehaviour
     {
+        [System.Serializable]
+        public class DeathEvent : UnityEvent<Enemy> { }
+
+        public float XP { get { return xp; } }
+        public int Money { get { return money; } }
+
         [Header("General Stats")]
         [SerializeField, Tooltip("How fast the enemy will move within the game.")]
         private float speed = 1;
@@ -25,30 +33,34 @@ namespace TowerDefence.Enemies
         [SerializeField, Tooltip("The amount of money the player will gain upon killing the enemy.")]
         private int money = 1;
 
+        [Space]
+
+        [SerializeField]
+        private DeathEvent onDeath = new DeathEvent();
+
         private Player player; // The reference to the player gameObject within the scene.
 
         /// <summary>
         /// Handles damage of the enemy and if below or equal to 0, calls Die
         /// </summary>
         /// <param name="_tower">The tower doing the damage to the enemy.</param>
-        public void Damage(Tower _tower)
+        public void Damage(float _damage)
         {
-            health -= _tower.Damage;
+            health -= _damage;
             if (health <= 0)
             {
-                Die(_tower);
+                Die();
             }
         }
 
         /// <summary>
         /// Handles the visual, and technical features of dying, such as giving the tower experience.
         /// </summary>
-        /// <param name="_tower">The tower that killed the enemy.</param>
-        private void Die(Tower _tower)
+        private void Die()
         {
-            _tower.AddExperience(xp);
-            player.AddMoney(money);
-            EnemyManager.instance.KillEnemy(this);
+            onDeath.Invoke(this);
+
+            // Visuals
         }
 
         // Start is called before the first frame update

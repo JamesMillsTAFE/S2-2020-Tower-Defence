@@ -164,9 +164,9 @@ namespace TowerDefence.Towers
 #endif
 
 
-        public void AddExperience(float _xp)
+        public void AddExperience(Enemy _enemy)
         {
-            xp += _xp;
+            xp += _enemy.XP;
             // Check that the level is not maxed out and that we have 
             // passed the required experience to level up
             if (level < maxLevel)
@@ -195,7 +195,7 @@ namespace TowerDefence.Towers
             // Make sure that there is actually something to target, if there is, damage it
             if (target != null)
             {
-                target.Damage(this);
+                target.Damage(Damage);
 
                 RenderAttackVisuals();
             }

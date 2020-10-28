@@ -24,6 +24,14 @@ namespace TowerDefence
         }
 
         /// <summary>
+        /// Gives the player the passed amount of money.
+        /// </summary>
+        public void AddMoney(Enemies.Enemy _enemy)
+        {
+            money += _enemy.Money;
+        }
+
+        /// <summary>
         /// Handles the removal of money when purchasing a tower and 
         /// notifies the TowerManager to place the tower
         /// </summary>
